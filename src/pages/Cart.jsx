@@ -7,9 +7,13 @@ const Cart = ({ items = [], onRemove, onCheckout }) => {
   return (
     <Flex direction="column" align="center" style={{ minHeight: '60vh', padding: 32 }}>
       <Card size="4" style={{ maxWidth: 500, width: '100%', padding: 32, boxShadow: '0 2px 16px #0001' }}>
-        <Text size="6" weight="bold" align="center" style={{ marginBottom: 24 }}>Seu Carrinho</Text>
+        <Text as="h1" size="6" weight="bold" align="center" style={{ marginBottom: 16 }}>
+          Seu Carrinho
+        </Text>
         {items.length === 0 ? (
-          <Text size="4" color="gray" align="center">Seu carrinho está vazio.</Text>
+          <Text as="p" size="4" color="gray" align="center" style={{ marginBottom: 8 }}>
+            Seu carrinho está vazio.
+          </Text>
         ) : (
           <>
             <Flex direction="column" gap="3" style={{ marginBottom: 16 }}>

@@ -1,13 +1,17 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
   background: #fff !important;
+  overflow-x: hidden;
 }
 
 body {
   background: #fff !important;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .logo {
@@ -80,13 +84,114 @@ body[data-radix-dialog-open] {
   overflow: hidden;
 }
 
-@media (max-width: 700px) {
+/* Estilos globais para evitar scroll horizontal */
+html, body, #root {
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Responsividade geral */
+@media (max-width: 900px) {
+  #root {
+    padding: 0.5rem;
+    max-width: 100%;
+  }
   .main-content {
-    max-width: 98vw;
-    padding: 8px 2px;
+    max-width: 100%;
+    padding: 8px 4px;
   }
   .card {
     padding: 1em;
-    min-width: 90vw;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .main-content {
+    max-width: 100%;
+    padding: 4px 2px;
+  }
+  .card {
+    padding: 0.8em;
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  #root {
+    padding: 0;
+  }
+  .main-content {
+    padding: 2px 0;
+    width: 100%;
+  }
+  .card {
+    padding: 0.5em;
+    border-radius: 12px;
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+  }
+  /* Grid de produtos */
+  .products-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+    padding: 0 4px;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  /* Ajuste para botões em mobile */
+  button {
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    max-width: 100%;
+  }
+  
+  /* Ajuste para diálogos em mobile */
+  [data-radix-dialog-content] {
+    width: 95%;
+    max-width: 95vw;
+    padding: 16px 12px;
+  }
+  
+  /* Força cards a terem largura limitada */
+  [data-radix-card-wrapper] {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Classes para layout de cards responsivos */
+.product-card {
+  width: calc(50% - 8px); /* Mobile: 2 por linha */
+  min-width: unset;
+  max-width: 100%;
+  margin: 4px;
+  box-shadow: 0 2px 12px #0001;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .product-card {
+    width: calc(33.333% - 12px); /* Tablet: 3 por linha */
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-card {
+    width: calc(25% - 16px); /* Desktop: 4 por linha */
   }
 }

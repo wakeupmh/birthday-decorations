@@ -34,8 +34,9 @@ function SortableItem({ item, onRemove }) {
     borderRadius: 10,
     boxShadow: isDragging ? '0 2px 8px #0002' : undefined,
     marginBottom: 8,
-    minWidth: 90,
-    maxWidth: 120,
+    minWidth: 70,
+    maxWidth: 100,
+    width: 'calc(33% - 8px)',
     position: 'relative',
     textAlign: 'center',
     padding: '8px 0',
@@ -49,11 +50,11 @@ function SortableItem({ item, onRemove }) {
       <IconButton {...listeners} variant="soft" size="1" style={{ position: 'absolute', left: 2, top: 2, cursor: 'grab' }} aria-label="Arrastar">
         <DragHandleDots2Icon />
       </IconButton>
-      <IconButton aria-label="Remover" color="red" size="1" style={{ position: 'absolute', right: 2, top: 2 }} onClick={() => onRemove(item)}>
+      <IconButton variant="soft" color="red" size="1" style={{ position: 'absolute', right: 2, top: 2 }} aria-label="Remover" onClick={() => onRemove(item)}>
         <Cross2Icon />
       </IconButton>
-      <img src={item.image} alt={item.name} style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, marginBottom: 4 }} />
-      <Text size="2">{item.name}</Text>
+      <img src={item.image} alt={item.name} style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, marginTop: 12, marginBottom: 4 }} />
+      <Text size={{ initial: '1', sm: '2' }} weight="medium" style={{ marginBottom: 4 }}>{item.name}</Text>
     </Box>
   );
 }
@@ -83,17 +84,19 @@ export default function Builder({ builderItems, onRemove, onReorder }) {
   // Responsivo: 2 colunas no mobile, 4+ em telas maiores
   const flexWrap = {
     display: 'flex',
-    gap: 12,
+    gap: 8,
     flexWrap: 'wrap',
     justifyContent: 'center',
     minHeight: 80,
+    width: '100%',
+    padding: '0 4px'
   };
 
   return (
-    <Card size="3" style={{ minHeight: 180, margin: '24px 0', background: '#f8fafc' }}>
+    <Card size="3" style={{ minHeight: 180, margin: '16px 0', background: '#f8fafc', width: '100%', maxWidth: '100%' }}>
       <Flex direction="column" align="center" justify="center" gap="3">
-        <Heading size="5">Área de Montagem</Heading>
-        <Text size="3">Arraste para reordenar ou remova itens da sua montagem:</Text>
+        <Heading size={{ initial: '4', sm: '5' }}>Área de Montagem</Heading>
+        <Text size={{ initial: '2', sm: '3' }} align="center">Arraste para reordenar ou remova itens da sua montagem:</Text>
         <Box mt="3" style={flexWrap}>
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items} strategy={verticalListSortingStrategy}>
