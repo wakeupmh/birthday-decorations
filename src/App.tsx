@@ -17,6 +17,7 @@ import Produtos from './pages/Produtos';
 import Contato from './pages/Contato';
 import Login from './pages/Login';
 import Cadastrar from './pages/Cadastrar';
+import NewKit from './pages/NewKit';
 
 function HomeContent({ onAdd, category, setCategory, builderOrder, onRemove, onReorder }) {
   return (
@@ -91,13 +92,22 @@ function AppContent() {
     toaster?.showToast({ title: 'Kit Esvaziado', description: 'Todos os itens foram removidos do seu kit Pegue e Monte.' });
   }
   
-  function handleFinalizePegueMonteKit() {
+  function handleFinalizePegueMonteKit(): void {
     if (pegueMonteKit.length === 0) {
-       toaster?.showToast({ title: 'Kit Vazio', description: 'Adicione itens antes de finalizar.', color:'orange' });
-       return;
+      toaster?.showToast({ title: 'Kit Vazio', description: 'Adicione itens antes de finalizar.', color: 'orange' });
+      return;
     }
-    toaster?.showToast({ title: 'Kit Enviado!', description: `Seu kit com ${pegueMonteKit.length} tipos de item está pronto!` });
-    navigate('/'); 
+    const newCartItems = [
+      ...cartItems,
+      ...pegueMonteKit.map(item => ({
+        ...item,
+        id: item.id + '-cart-' + Date.now()
+      }))
+    ];
+    setCartItems(newCartItems);
+    toaster?.showToast({ title: 'Kit adicionado ao Carrinho', description: 'Seu kit com ' + pegueMonteKit.length + ' itens foi adicionado ao carrinho.' });
+    setPegueMonteKit([]);
+    navigate('/carrinho');
   }
 
   function handleBuilderReorder(newOrder) {
@@ -107,27 +117,30 @@ function AppContent() {
   return (
     <Theme appearance="light" accentColor="iris" radius="medium">
       <Container size="4" py="4" style={{ maxWidth: '100%', width: '100%', margin: '0 auto', padding: '0', overflow: 'hidden' }}>
-        <Navbar cartCount={cartItems.length} onCartClick={() => navigate('/carrinho')} />
+        <Navbar cartCount={cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)} onCartClick={() => navigate('/carrinho')} />
         <div className="app-container" style={{ maxWidth: '100%', overflow: 'hidden' }}>
           <Routes>
-            <Route path="/" element={<HomeContent onAdd={handleAddToCart} category={category} setCategory={setCategory} builderOrder={builderOrder} onRemove={handleRemoveFromCart} onReorder={handleBuilderReorder} />} />
-            
-            <Route 
-              path="/pegue-e-monte" 
-              element={(
-                <PegueMonte 
-                  kitItems={pegueMonteKit} 
-                  onAddItem={handleAddToPegueMonteKit} 
-                  onRemoveItem={handleRemoveFromPegueMonteKit} 
-                  onClearKit={handleClearPegueMonteKit} 
-                  onFinalizeKit={handleFinalizePegueMonteKit} 
-                  category={category} 
-                  setCategory={setCategory} 
-                />
-              )} 
+            <Route
+              path="/"
+              element={
+                <>
+                  <Banner />
+                  <PegueMonte
+                    kitItems={pegueMonteKit}
+                    onAddItem={handleAddToPegueMonteKit}
+                    onRemoveItem={handleRemoveFromPegueMonteKit}
+                    onClearKit={handleClearPegueMonteKit}
+                    onFinalizeKit={handleFinalizePegueMonteKit}
+                    category={category}
+                    setCategory={setCategory}
+                  />
+                </>
+              }
             />
             
-            <Route path="/produtos" element={<Produtos />} />
+            <Route path="/new-kit" element={<NewKit />} />
+            <Route
+              path="/produtos" element={<Produtos />} />
             <Route path="/contato" element={<Contato />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastrar" element={<Cadastrar />} />

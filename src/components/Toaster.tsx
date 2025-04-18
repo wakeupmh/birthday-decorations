@@ -31,12 +31,16 @@ export default function ToasterProvider({ children }) {
     <ToasterContext.Provider value={{ showToast }}>
       <ToastPrimitive.Provider swipeDirection="right">
         {children}
-        <ToastPrimitive.Viewport className="ToastViewport" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 999 }} />
+        <ToastPrimitive.Viewport className="ToastViewport" />
         <ToastPrimitive.Root
           className="ToastRoot"
           open={open}
           onOpenChange={setOpen}
           style={{
+            position: 'fixed',
+            bottom: 24,
+            right: 24,
+            zIndex: 10000,
             backgroundColor: 'white',
             borderRadius: 6,
             boxShadow: 'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',

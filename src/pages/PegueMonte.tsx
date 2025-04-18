@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flex, Box, Text, Card, Heading, Separator, Button, Tabs, Badge } from '@radix-ui/themes';
+import { Flex, Box, Text, Card, Heading, Separator, Button, Tabs, Badge, CheckboxCards } from '@radix-ui/themes';
 import Categories from '../components/Categories';
-import ProductList, { products as availableProducts } from '../components/ProductList';
+import { products as availableProducts } from '../components/ProductList';
 
 export default function PegueMonte({ kitItems = [], onAddItem, onRemoveItem, onFinalizeKit, onClearKit, category, setCategory }) {
   
@@ -50,43 +50,55 @@ export default function PegueMonte({ kitItems = [], onAddItem, onRemoveItem, onF
         <Box 
           style={{ 
             flex: 2,
-            display: activeTab === 'catalog' ? 'block' : 'none'
+            display: activeTab === 'catalog' ? 'flex' : 'none',
+            flexDirection: 'column',
+            height: '100%',
           }}
           className="desktop-always-show"
         >
           <Categories value={category} onValueChange={setCategory} />
           <Separator my="4" />
-          <Flex gap={{ initial: '2', sm: '4' }} wrap="wrap" py={{ initial: '2', sm: '4' }} justify="center" style={{ 
-            maxWidth: '100%', 
-            margin: '0 auto',
-            overflow: 'hidden',
-            width: '100%'
-          }}>
-            {filteredProducts.map((product) => (
-              <Card
-                key={product.id}
-                size="2"
-                className="product-card"
-                style={{
-                  cursor: 'pointer',
-                }}
-              >
-                <Flex direction="column" align="center" gap="2">
+          <Box
+            py={{ initial: '2', sm: '4' }}
+            style={{
+              flex: 1,
+              minHeight: 0,
+              width: '100%',
+            }}
+          >
+            <CheckboxCards.Root
+              value={kitItems.map(item => item.id.toString())}
+              onValueChange={(values) => {
+                const newIds = values.map(v => parseInt(v, 10));
+                // Items added
+                newIds.filter(id => !kitItems.some(item => item.id === id))
+                  .forEach(id => {
+                    const product = availableProducts.find(p => p.id === id);
+                    if (product) onAddItem(product);
+                  });
+                // Items removed
+                kitItems.filter(item => !newIds.includes(item.id))
+                  .forEach(item => onRemoveItem(item));
+              }}
+              size="3"
+              variant="surface"
+              color="iris"
+              columns="repeat(3, 1fr)"
+              gap="4"
+            >
+              {filteredProducts.map(product => (
+                <CheckboxCards.Item
+                  key={product.id}
+                  value={product.id.toString()}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 16, paddingTop: 24, gap: 8 }}
+                >
                   <img src={product.image} alt={product.name} style={{ width: '80%', maxWidth: 100, height: 'auto', aspectRatio: '1/1', objectFit: 'cover', borderRadius: 12, marginBottom: 8 }} />
                   <Text size={{ initial: '3', sm: '4' }} weight="bold" align="center">{product.name}</Text>
                   <Text size={{ initial: '2', sm: '3' }} color="iris" align="center">R$ {product.price.toFixed(2)}</Text>
-                  <Button
-                    variant="solid"
-                    color="iris"
-                    radius="large"
-                    size={{ initial: '2', sm: '3' }}
-                    style={{ marginTop: 12 }}
-                    onClick={() => onAddItem(product)}
-                  >Adicionar ao Kit</Button>
-                </Flex>
-              </Card>
-            ))}
-          </Flex>
+                </CheckboxCards.Item>
+              ))}
+            </CheckboxCards.Root>
+          </Box>
         </Box>
 
         {/* Coluna Direita: Seu Kit */}
@@ -94,11 +106,13 @@ export default function PegueMonte({ kitItems = [], onAddItem, onRemoveItem, onF
           style={{ 
             flex: 1, 
             minWidth: '280px',
+            minHeight: '240px',
+            overflowY: 'auto',
             display: activeTab === 'kit' ? 'block' : 'none'
           }}
           className="desktop-always-show"
         >
-          <Card size="2" style={{ height: '100%' }}>
+          <Card size="2" style={{ height: '100%', minHeight: '240px', maxHeight: '70vh', display: 'flex', flexDirection: 'column' }}>
             <Heading size="5" mb="4">Seu Kit Atual</Heading>
             
             {kitItems.length === 0 ? (
@@ -106,7 +120,7 @@ export default function PegueMonte({ kitItems = [], onAddItem, onRemoveItem, onF
                 Adicione itens do catálogo ao seu kit.
               </Text>
             ) : (
-              <Box>
+              <Box style={{ flex: 1, overflowY: 'auto' }}>
                 {kitItems.map((item) => (
                   <Card key={item.id} style={{ marginBottom: '12px' }}>
                     <Flex align="center" gap="3">
@@ -120,8 +134,8 @@ export default function PegueMonte({ kitItems = [], onAddItem, onRemoveItem, onF
                           objectFit: 'cover'
                         }} 
                       />
-                      <Box style={{ flex: 1 }}>
-                        <Text weight="bold">{item.name}</Text>
+                      <Box style={{ flex: 1, minWidth: 0 }}>
+                        <Text weight="bold" style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{item.name}</Text>
                         <Flex justify="between" align="center" style={{ marginTop: '4px' }}>
                           <Text size="2" color="iris">R$ {item.price.toFixed(2)}</Text>
                           <Button 
@@ -159,7 +173,7 @@ export default function PegueMonte({ kitItems = [], onAddItem, onRemoveItem, onF
       </Flex>
       
       {/* CSS para controlar a exibição em desktop vs mobile */}
-      <style jsx>{`
+      <style>{`
         @media (min-width: 768px) {
           .mobile-only {
             display: none;

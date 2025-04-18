@@ -1,3 +1,12 @@
+// @ts-check
+/**
+ * @typedef NavbarProps
+ * @property {() => void} onCartClick - callback when cart icon clicked
+ * @property {number=} cartCount - number of items in cart
+ */
+/**
+ * @param {NavbarProps} props
+ */
 import * as React from 'react';
 import { Flex, Box, Text, Button, Avatar, IconButton, Badge } from '@radix-ui/themes';
 import { BackpackIcon } from '@radix-ui/react-icons';
@@ -16,9 +25,9 @@ export default function Navbar({ onCartClick, cartCount = 0 }) {
         {/* Container interno para links e botões para permitir quebra de linha apenas neles */}
         <Flex align="center" gap={{ initial: '2', sm: '4' }} wrap={{ initial: 'wrap', sm: 'nowrap' }} justify={{ initial: 'center', sm: 'end' }} style={{ flexGrow: 1 }}>
           <Button variant="ghost" onClick={() => navigate('/')}>Início</Button>
-          <Button variant="ghost" onClick={() => navigate('/pegue-e-monte')}>Pegue e Monte</Button>
           <Button variant="ghost" onClick={() => navigate('/produtos')}>Produtos</Button>
           <Button variant="ghost" onClick={() => navigate('/contato')}>Contato</Button>
+          <Button variant="ghost" onClick={() => navigate('/new-kit')}>Novo Kit</Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="soft">Entrar</Button>
