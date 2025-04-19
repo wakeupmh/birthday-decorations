@@ -17,7 +17,8 @@ import Produtos from './pages/Produtos';
 import Contato from './pages/Contato';
 import Login from './pages/Login';
 import Cadastrar from './pages/Cadastrar';
-import NewKit from './pages/NewKit';
+import Dashboard from './pages/Dashboard';
+import Pix from './pages/Pix';
 
 function HomeContent({ onAdd, category, setCategory, builderOrder, onRemove, onReorder }) {
   return (
@@ -58,8 +59,18 @@ function AppContent() {
   
   function handleCheckout() {
     toaster?.showToast({ title: 'Pedido do Carrinho enviado!', description: `Seu pedido com ${cartItems.length} itens foi enviado com sucesso.` });
+    // Record sale in localStorage
+    const sale = {
+      id: Date.now().toString(),
+      items: cartItems,
+      date: new Date().toLocaleString(),
+      totalItems: cartItems.reduce((sum, i) => sum + (i.quantity || 1), 0),
+      totalValue: cartItems.reduce((sum, i) => sum + ((i.price || 0) * (i.quantity || 1)), 0),
+    };
+    const savedSales = JSON.parse(localStorage.getItem('sales') || '[]');
+    localStorage.setItem('sales', JSON.stringify([...savedSales, sale]));
     setCartItems([]);
-    navigate('/');
+    navigate('/pix');
   }
 
   function handleAddToPegueMonteKit(product) {
@@ -138,7 +149,7 @@ function AppContent() {
               }
             />
             
-            <Route path="/new-kit" element={<NewKit />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route
               path="/produtos" element={<Produtos />} />
             <Route path="/contato" element={<Contato />} />
@@ -146,6 +157,7 @@ function AppContent() {
             <Route path="/cadastrar" element={<Cadastrar />} />
             <Route path="/produto/:productId" element={<ProductDetail />} />
             
+            <Route path="/pix" element={<Pix />} />
             <Route path="/carrinho" element={<Cart items={cartItems} onRemove={handleRemoveFromCart} onCheckout={handleCheckout} />} />
           </Routes>
         </div>

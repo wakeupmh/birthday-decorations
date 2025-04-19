@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Flex, Box, Text, Card, Heading, Separator, Button, Tabs, Badge, CheckboxCards } from '@radix-ui/themes';
 import Categories from '../components/Categories';
 import { products as availableProducts } from '../components/ProductList';

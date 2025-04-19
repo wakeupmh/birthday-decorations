@@ -27,7 +27,7 @@ export const products = [
   { id: 13, name: 'Centro de Mesa Floral', price: 35.9, image: 'https://via.placeholder.com/120x120?text=Centro', category: 'flores', description: 'Centro de mesa com flores artificiais para decoração.' },
 ];
 
-export default function ProductList({ onAdd, category, products: customProducts }) {
+export default function ProductList({ onAdd, category, products: customProducts = products }: { onAdd: (product: any) => void; category: string; products?: typeof products }) {
   const navigate = useNavigate();
   // Se customProducts for fornecido, use-o; caso contrário, use a lista padrão
   const productsToUse = customProducts || products;

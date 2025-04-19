@@ -27,7 +27,7 @@ export default function Navbar({ onCartClick, cartCount = 0 }) {
           <Button variant="ghost" onClick={() => navigate('/')}>Início</Button>
           <Button variant="ghost" onClick={() => navigate('/produtos')}>Produtos</Button>
           <Button variant="ghost" onClick={() => navigate('/contato')}>Contato</Button>
-          <Button variant="ghost" onClick={() => navigate('/new-kit')}>Novo Kit</Button>
+          <Button variant="ghost" onClick={() => navigate('/dashboard')}>Painel</Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="soft">Entrar</Button>
